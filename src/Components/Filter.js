@@ -1,11 +1,12 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Form,Button } from 'react-bootstrap'
+import { CartState } from '../Context/Context'
 import Rating from './Rating'
 import './styles.css'
 
 const Filter = () => {
 
-    const [state, setstate] = useState(0)
+    const {prodstate : { byRating , sort, byFastDelivery,byStock} , prodDispatch } = CartState();
 
     return (
         <div className="filters">
@@ -17,6 +18,13 @@ const Filter = () => {
                     name='group1'
                     type='radio'
                     id={`inline-1`}
+                    onChange={() => (
+                        prodDispatch({
+                            type : "SORT_BY_PRICE",
+                            payload : 'lowToHigh'
+                        })
+                    )}
+                    checked={sort === 'lowToHigh' ? true : false }
                     />
             </span>
             <span>
@@ -26,6 +34,13 @@ const Filter = () => {
                     name='group1'
                     type='radio'
                     id={`inline-2`}
+                    onChange={() => (
+                        prodDispatch({
+                            type : "SORT_BY_PRICE",
+                            payload : 'highToLow'
+                        })
+                    )}
+                    checked={sort === 'highToLow' ? true : false }
                     />
             </span>
             <span>
@@ -35,6 +50,12 @@ const Filter = () => {
                     name='group1'
                     type='checkbox'
                     id={`inline-3`}
+                    onChange={() => (
+                        prodDispatch({
+                            type : "FILTER_BY_STOCK"
+                        })
+                    )}
+                    checked={byStock}
                     />
             </span>
             <span>
@@ -44,14 +65,29 @@ const Filter = () => {
                     name='group1'
                     type='checkbox'
                     id={`inline-4`}
+                    onChange={() => (
+                        prodDispatch({
+                            type : "FILTER_BY_DELIVERY"
+                        })
+                    )}
+                    checked={byFastDelivery}
                     />
             </span>
             <span>
                     <label style={{ paddingRight: 10 }}>Rating: </label>
-                    <Rating rating={state} style={{cursor : 'pointer'}} onClick={(i) => setstate(i+1)}/>
+                    <Rating rating={byRating} style={{cursor : 'pointer'}} onClick={(i) => (
+                        prodDispatch({
+                            type : "FILTER_BY_RATING",
+                            payload :  i+1
+                        })
+                    )}/>
                 
             </span>      
-            <Button variant='light'>Clear Filters</Button>
+            <Button variant='light' onClick={() => (
+                        prodDispatch({
+                            type : "CLEAR_FILTER"
+                        })
+                    )}>Clear Filters</Button>
         </div>
     )
 }

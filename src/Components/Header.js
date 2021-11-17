@@ -8,7 +8,7 @@ import { CartState } from '../Context/Context'
 
 const Header = () => {
 
-    const {state:{cart},dispatch} = CartState();
+    const {state:{cart},dispatch, prodDispatch} = CartState();
 
     return (
         <Navbar bg={'dark'} variant={'dark'} style={{ height : 80 }}>
@@ -20,7 +20,14 @@ const Header = () => {
                     <FormControl
                             style={{width : 500}}
                             placeholder="Search a product"
-                            className="m-auto"/>
+                            className="m-auto"
+                           
+                            onChange={(e) => (
+                                prodDispatch({
+                                    type: 'FILTER_BY_SEARCH',
+                                    payload : e.target.value
+                                })
+                            )}/>
                 </Navbar.Text>
                 <Nav>
                     <Dropdown alignRight>
